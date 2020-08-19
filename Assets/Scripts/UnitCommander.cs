@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class UnitCommander : MonoBehaviour
@@ -37,6 +38,7 @@ public class UnitCommander : MonoBehaviour
                 if (hit.collider.CompareTag("Ground"))
                 {
                     UnitsMoveToPosition(hit.point, selectedUnits);
+                    CreateSelectionMarker(hit.point);
                 }
             }
         }
@@ -48,5 +50,11 @@ public class UnitCommander : MonoBehaviour
         {
             units[x].MoveToPosition(movePos);
         }
+    }
+
+    // creates a new selection marker visual at the given position
+    void CreateSelectionMarker(Vector3 pos)
+    {
+        Instantiate(selectionMarkerPrefab, new Vector3(pos.x, 0.01f, pos.z), Quaternion.identity);
     }
 }
