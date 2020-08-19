@@ -218,7 +218,7 @@ MonoBehaviour:
     type: 3}
   layerMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 1792
 --- !u!114 &119883964
 MonoBehaviour:
   m_ObjectHideFlags: 0
