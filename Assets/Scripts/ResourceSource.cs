@@ -27,6 +27,9 @@ public class ResourceSource : MonoBehaviour
         if (quantity < 0)
             amountToGive = amount + quantity;
 
+        // give player the resource
+        gatheringPlayer.GainResource(type, amountToGive);
+
         // if we're depleted, delete the resource
         if (quantity <= 0)
             Destroy(gameObject);
