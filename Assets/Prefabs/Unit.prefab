@@ -126,6 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367c3509f1fe42441a160ee31bd1d822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
+  gatherAmount: 1
+  gatherRate: 0.5
+  selectionVisual: {fileID: 0}
+  player: {fileID: 0}
 --- !u!195 &7975616054802283445
 NavMeshAgent:
   m_ObjectHideFlags: 0

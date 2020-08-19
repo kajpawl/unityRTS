@@ -38,7 +38,14 @@ public class UnitCommander : MonoBehaviour
                 if (hit.collider.CompareTag("Ground"))
                 {
                     UnitsMoveToPosition(hit.point, selectedUnits);
-                    CreateSelectionMarker(hit.point);
+                    CreateSelectionMarker(hit.point, false);
+                }
+
+                // are we clicking on the resource?
+                else if (hit.collider.CompareTag("Resource"))
+                {
+                    UnitsGatherResource(hit.collider.GetComponent<ResourceSource>(), selectedUnits);
+                    CreateSelectionMarker(hit.collider.transform.position, true);
                 }
             }
         }
@@ -55,9 +62,32 @@ public class UnitCommander : MonoBehaviour
         }
     }
 
-    // creates a new selection marker visual at the given position
-    void CreateSelectionMarker(Vector3 pos)
+    // called when we command units to gather a resource
+    void UnitsGatherResource(ResourceSource resource, Unit[] units)
     {
-        Instantiate(selectionMarkerPrefab, new Vector3(pos.x, 0.01f, pos.z), Quaternion.identity);
+        // are we jist selecting 1 unit?
+        if (units.Length == 1)
+        {
+            units[0].GatherResource(resource, UnitMover.GetUnitDestinationAroundResource(resource.transform.position));
+        }
+        // otherwise, calculate the unit group formation
+        else
+        {
+            Vector3[] destinations = UnitMover.GetUnitGroupDestinationsAroundResource(resource.transform.position, units.Length);
+
+            for (int x = 0; x < units.Length; x++)
+            {
+                units[x].GatherResource(resource, destinations[x]);
+            }
+        }
+    }
+
+    // creates a new selection marker visual at the given position
+    void CreateSelectionMarker(Vector3 pos, bool large)
+    {
+        GameObject marker = Instantiate(selectionMarkerPrefab, new Vector3(pos.x, 0.01f, pos.z), Quaternion.identity);
+
+        if (large)
+            marker.transform.localScale = Vector3.one * 3;
     }
 }

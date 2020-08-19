@@ -35,4 +35,28 @@ public class UnitMover : MonoBehaviour
 
         return destinations;
     }
+
+    // returns an array of positions evenly spaced around a resource
+    public static Vector3[] GetUnitGroupDestinationsAroundResource(Vector3 resourcePos, int unitsNum)
+    {
+        Vector3[] destinations = new Vector3[unitsNum];
+        float unitDistanceGap = 360.0f / (float)unitsNum;
+
+        for (int x = 0; x < unitsNum; x++)
+        {
+            float angle = unitDistanceGap * x;
+            Vector3 dir = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+            destinations[x] = resourcePos + dir;
+        }
+
+        return destinations;
+    }
+
+    public static Vector3 GetUnitDestinationAroundResource(Vector3 resourcePos)
+    {
+        float angle = Random.Range(0, 360);
+        Vector3 dir = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+
+        return resourcePos + dir;
+    }
 }
