@@ -31,13 +31,12 @@ public class UnitSelection : MonoBehaviour
 
             TrySelect(Input.mousePosition);
             startPos = Input.mousePosition;
-
         }
 
         // mouse up
         if (Input.GetMouseButtonUp(0))
         {
-
+            ReleaseSelectionBox();
         }
 
         // mouse held down
@@ -76,6 +75,26 @@ public class UnitSelection : MonoBehaviour
 
         selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
         selectionBox.anchoredPosition = startPos + new Vector2(width / 2, height / 2);
+    }
+
+    // called when we release the selection box
+    void ReleaseSelectionBox()
+    {
+        selectionBox.gameObject.SetActive(false);
+
+        Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
+        Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
+
+        foreach(Unit unit in player.units)
+        {
+            Vector3 screenPos = cam.WorldToScreenPoint(unit.transform.position);
+
+            if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
+            {
+                selectedUnits.Add(unit);
+                unit.ToggleSelectionVisual(true);
+            }
+        }
     }
 
     // toggles the selected units selection visual
