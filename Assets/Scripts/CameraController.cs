@@ -12,8 +12,11 @@ public class CameraController : MonoBehaviour
 
     private Camera cam;
 
+    public static CameraController instance;
+
     void Awake()
     {
+        instance = this;
         cam = Camera.main;
     }
 

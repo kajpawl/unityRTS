@@ -26,6 +26,11 @@ public class Player : MonoBehaviour
     {
         GameUI.instance.UpdateUnitCountText(units.Count);
         GameUI.instance.UpdateFoodText(food);
+
+        CameraController.instance.FocusOnPosition(unitSpawnPos.position);
+
+        food += unitCost;
+        CreateNewUnit();
     }
 
     // called when a unit gathers a certain resource
