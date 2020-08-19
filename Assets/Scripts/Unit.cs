@@ -136,6 +136,12 @@ public class Unit : MonoBehaviour
         navAgent.SetDestination(pos);
     }
 
+    // move to an enemy unit and attack it
+    public void AttackUnit(Unit target)
+    {
+
+    }
+
     // toggles the selection ring around our feet
     public void ToggleSelectionVisual(bool selected)
     {

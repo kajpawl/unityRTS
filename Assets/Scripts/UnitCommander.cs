@@ -34,6 +34,8 @@ public class UnitCommander : MonoBehaviour
             // shoot the raycast
             if (Physics.Raycast(ray, out hit, 100, layerMask))
             {
+                unitSelection.RemoveNullUnitsFromSelection();
+
                 // are we clicking on the ground?
                 if (hit.collider.CompareTag("Ground"))
                 {
@@ -46,6 +48,18 @@ public class UnitCommander : MonoBehaviour
                 {
                     UnitsGatherResource(hit.collider.GetComponent<ResourceSource>(), selectedUnits);
                     CreateSelectionMarker(hit.collider.transform.position, true);
+                }
+
+                // did we click on an enemy?
+                else if (hit.collider.CompareTag("Unit"))
+                {
+                    Unit enemy = hit.collider.gameObject.GetComponent<Unit>();
+
+                    if (!Player.me.IsMyUnit(enemy))
+                    {
+                        UnitsAttackEnemy(enemy, selectedUnits);
+                        CreateSelectionMarker(enemy.transform.position, false);
+                    }
                 }
             }
         }
@@ -65,11 +79,12 @@ public class UnitCommander : MonoBehaviour
     // called when we command units to gather a resource
     void UnitsGatherResource(ResourceSource resource, Unit[] units)
     {
-        // are we jist selecting 1 unit?
+        // are we just selecting 1 unit?
         if (units.Length == 1)
         {
             units[0].GatherResource(resource, UnitMover.GetUnitDestinationAroundResource(resource.transform.position));
         }
+
         // otherwise, calculate the unit group formation
         else
         {
@@ -80,6 +95,13 @@ public class UnitCommander : MonoBehaviour
                 units[x].GatherResource(resource, destinations[x]);
             }
         }
+    }
+
+    // called when we command units to attack an enemy
+    void UnitsAttackEnemy(Unit target, Unit[] units)
+    {
+        for (int x = 0; x < units.Length; x++)
+            units[x].AttackUnit(target);
     }
 
     // creates a new selection marker visual at the given position

@@ -97,6 +97,16 @@ public class UnitSelection : MonoBehaviour
         }
     }
 
+    // removes all destroyed or missing units from the selected list
+    public void RemoveNullUnitsFromSelection()
+    {
+        for (int x = 0; x < selectedUnits.Count; x++)
+        {
+            if (selectedUnits[x] == null)
+                selectedUnits.RemoveAt(x);
+        }
+    }
+
     // toggles the selected units selection visual
     void ToggleSelectionVisual(bool selected)
     {

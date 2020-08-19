@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
+    public bool isMe;
+
     [Header("Units")]
     public List<Unit> units = new List<Unit>();
 
@@ -21,6 +23,14 @@ public class Player : MonoBehaviour
     public UnitCreatedEvent onUnitCreated;
 
     public readonly int unitCost = 50;
+
+    public static Player me;
+
+    void Awake()
+    {
+        if (isMe)
+            me = this;
+    }
 
     void Start()
     {
