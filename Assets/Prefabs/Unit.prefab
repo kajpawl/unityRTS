@@ -1472,7 +1472,7 @@ GameObject:
   - component: {fileID: 8704810006351943495}
   - component: {fileID: 1420796209373797668}
   m_Layer: 8
-  m_Name: Unit 1
+  m_Name: Unit
   m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1507,10 +1507,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  curHp: 15
+  maxHp: 15
+  minAttackDamage: 1
+  maxAttackDamage: 3
+  attackRate: 0.5
+  attackDistance: 1.5
+  pathUpdateRate: 1
   gatherAmount: 1
   gatherRate: 0.5
   selectionVisual: {fileID: 6284292687313400390}
+  healthBar: {fileID: 0}
   player: {fileID: 0}
+  onStateChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!195 &8704810006351943495
 NavMeshAgent:
   m_ObjectHideFlags: 0

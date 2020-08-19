@@ -10,7 +10,9 @@ public enum UnitState
     Idle,
     Move,
     MoveToResource,
-    Gather
+    Gather,
+    MoveToEnemy,
+    Attack
 }
 
 public class Unit : MonoBehaviour
@@ -18,26 +20,45 @@ public class Unit : MonoBehaviour
     [Header("Stats")]
     public UnitState state;
 
+    public int curHp;
+    public int maxHp;
+
+    public int minAttackDamage;
+    public int maxAttackDamage;
+
+    public float attackRate;
+    private float lastAttackTime;
+
+    public float attackDistance;
+
+    public float pathUpdateRate = 1.0f;
+    private float lastPathUpdateTime;
+
     public int gatherAmount;
     public float gatherRate;
     private float lastGatherTime;
 
     private ResourceSource curResourceSource;
+    private Unit curEnemyTarget;
 
     [Header("Components")]
     public GameObject selectionVisual;
     private NavMeshAgent navAgent;
+    public UnitHealthBar healthBar;
 
     public Player player;
 
     // events
+    [System.Serializable]
     public class StateChangeEvent : UnityEvent<UnitState> { }
     public StateChangeEvent onStateChange;
 
-    void Awake()
+    void Start()
     {
         // get the components
         navAgent = GetComponent<NavMeshAgent>();
+
+        SetState(UnitState.Idle);
     }
 
     void SetState(UnitState toState)
@@ -72,6 +93,16 @@ public class Unit : MonoBehaviour
             case UnitState.Gather:
             {
                 GatherUpdate();
+                break;
+            }
+            case UnitState.MoveToEnemy:
+            {
+                MoveToEnemyUpdate();
+                break;
+            }
+            case UnitState.Attack:
+            {
+                AttackUpdate();
                 break;
             }
             default:
@@ -117,6 +148,74 @@ public class Unit : MonoBehaviour
         }
     }
 
+    // called every frame the 'MoveToEnemy' state is active
+    void MoveToEnemyUpdate()
+    {
+        // if our target is dead, go idle
+        if (curEnemyTarget == null)
+        {
+            SetState(UnitState.Idle);
+            return;
+        }
+
+        if (Time.time - lastPathUpdateTime > pathUpdateRate)
+        {
+            lastPathUpdateTime = Time.time;
+            navAgent.isStopped = false;
+            navAgent.SetDestination(curEnemyTarget.transform.position);
+        }
+
+        if (Vector3.Distance(transform.position, curEnemyTarget.transform.position) <= attackDistance)
+            SetState(UnitState.Attack);
+    }
+
+    // called every frame the 'Attack' state is active
+    void AttackUpdate()
+    {
+        // if our target is dead, go idle
+        if (curEnemyTarget == null)
+        {
+            SetState(UnitState.Idle);
+            return;
+        }
+
+        // if we're moving, stop
+        if (!navAgent.isStopped)
+            navAgent.isStopped = true;
+
+        // attack every 'attackRate' seconds
+        if (Time.time - lastAttackTime > attackRate)
+        {
+            lastAttackTime = Time.time;
+            curEnemyTarget.TakeDamage(UnityEngine.Random.Range(minAttackDamage, maxAttackDamage + 1));
+        }
+
+        // look at the enemy
+        LookAt(curEnemyTarget.transform.position);
+
+        // if we're too far away, move towards the enemy
+        if (Vector3.Distance(transform.position, curEnemyTarget.transform.position) > attackDistance)
+            SetState(UnitState.MoveToEnemy);
+    }
+
+    // called when an enemy attacks us
+    public void TakeDamage(int damage)
+    {
+        curHp -= damage;
+
+        if (curHp <= 0)
+            Die();
+
+        // update the health bar
+    }
+
+    // called when our health reaches 0
+    void Die()
+    {
+        player.units.Remove(this);
+        Destroy(gameObject);
+    }
+
     // moves the unit to a specific position
     public void MoveToPosition(Vector3 pos)
     {
@@ -139,7 +238,8 @@ public class Unit : MonoBehaviour
     // move to an enemy unit and attack it
     public void AttackUnit(Unit target)
     {
-
+        curEnemyTarget = target;
+        SetState(UnitState.MoveToEnemy);
     }
 
     // toggles the selection ring around our feet
