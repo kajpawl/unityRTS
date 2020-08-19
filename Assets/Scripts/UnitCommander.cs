@@ -44,11 +44,14 @@ public class UnitCommander : MonoBehaviour
         }
     }
 
+    // called when we command units to move somewhere
     void UnitsMoveToPosition(Vector3 movePos, Unit[] units)
     {
+        Vector3[] destinations = UnitMover.GetUnitGroupDestinations(movePos, units.Length, 2);
+
         for (int x = 0; x < units.Length; x++)
         {
-            units[x].MoveToPosition(movePos);
+            units[x].MoveToPosition(destinations[x]);
         }
     }
 
