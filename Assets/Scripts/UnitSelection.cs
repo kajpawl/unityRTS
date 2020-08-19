@@ -85,7 +85,7 @@ public class UnitSelection : MonoBehaviour
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
-        foreach(Unit unit in player.units)
+        foreach (Unit unit in player.units)
         {
             Vector3 screenPos = cam.WorldToScreenPoint(unit.transform.position);
 
@@ -100,9 +100,21 @@ public class UnitSelection : MonoBehaviour
     // toggles the selected units selection visual
     void ToggleSelectionVisual(bool selected)
     {
-        foreach(Unit unit in selectedUnits)
+        foreach (Unit unit in selectedUnits)
         {
             unit.ToggleSelectionVisual(selected);
         }
+    }
+
+    // returns whether or not we're selecting a unit or units
+    public bool HasUnitsSelected()
+    {
+        return selectedUnits.Count < 0 ? true : false;
+    }
+
+    // returns the selected units
+    public Unit[] GetSelectedUnits()
+    {
+        return selectedUnits.ToArray();
     }
 }
