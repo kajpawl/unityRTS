@@ -16,7 +16,7 @@ public class UnitSelection : MonoBehaviour
 
     void Awake()
     {
-        // get the componenets
+        // get the components
         cam = Camera.main;
         player = GetComponent<Player>();
     }
@@ -109,7 +109,7 @@ public class UnitSelection : MonoBehaviour
     // returns whether or not we're selecting a unit or units
     public bool HasUnitsSelected()
     {
-        return selectedUnits.Count < 0 ? true : false;
+        return selectedUnits.Count > 0 ? true : false;
     }
 
     // returns the selected units
