@@ -22,6 +22,12 @@ public class Player : MonoBehaviour
 
     public readonly int unitCost = 50;
 
+    void Start()
+    {
+        GameUI.instance.UpdateUnitCountText(units.Count);
+        GameUI.instance.UpdateFoodText(food);
+    }
+
     // called when a unit gathers a certain resource
     public void GainResource(ResourceType resourceType, int amount)
     {
@@ -30,6 +36,7 @@ public class Player : MonoBehaviour
             case ResourceType.Food:
             {
                 food += amount;
+                GameUI.instance.UpdateFoodText(food);
                 break;
             };
             default:
@@ -37,14 +44,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            CreateNewUnit();
-        }
-    }
-
+    // creates a new unit for the player
     public void CreateNewUnit()
     {
         if (food - unitCost < 0)
@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
 
         if (onUnitCreated != null)
             onUnitCreated.Invoke(unit);
+
+        GameUI.instance.UpdateUnitCountText(units.Count);
+        GameUI.instance.UpdateFoodText(food);
     }
 
     // is this my unit?
