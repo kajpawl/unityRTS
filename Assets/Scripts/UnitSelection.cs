@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class UnitSelection : MonoBehaviour
 {
+    public RectTransform selectionBox;
     public LayerMask unitLayerMask;
 
     private List<Unit> selectedUnits = new List<Unit>();
+    private Vector2 startPos;
 
     // components
     private Camera cam;
@@ -28,6 +30,20 @@ public class UnitSelection : MonoBehaviour
             selectedUnits = new List<Unit>();
 
             TrySelect(Input.mousePosition);
+            startPos = Input.mousePosition;
+
+        }
+
+        // mouse up
+        if (Input.GetMouseButtonUp(0))
+        {
+
+        }
+
+        // mouse held down
+        if (Input.GetMouseButton(0))
+        {
+            UpdateSelectionBox(Input.mousePosition);
         }
     }
 
@@ -49,6 +65,20 @@ public class UnitSelection : MonoBehaviour
         }
     }
 
+    // called when we are creating a selection box
+    void UpdateSelectionBox(Vector2 curMousePos)
+    {
+        if (!selectionBox.gameObject.activeInHierarchy)
+            selectionBox.gameObject.SetActive(true);
+
+        float width = curMousePos.x - startPos.x;
+        float height = curMousePos.y - startPos.y;
+
+        selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
+        selectionBox.anchoredPosition = startPos + new Vector2(width / 2, height / 2);
+    }
+
+    // toggles the selected units selection visual
     void ToggleSelectionVisual(bool selected)
     {
         foreach(Unit unit in selectedUnits)
