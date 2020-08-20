@@ -246,7 +246,8 @@ public class Unit : MonoBehaviour
     // toggles the selection ring around our feet
     public void ToggleSelectionVisual(bool selected)
     {
-        selectionVisual.SetActive(selected);
+        if (selectionVisual != null)
+            selectionVisual.SetActive(selected);
     }
 
     // rotate to face the given position

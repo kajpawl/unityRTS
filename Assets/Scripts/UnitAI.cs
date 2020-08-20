@@ -42,6 +42,7 @@ public class UnitAI : MonoBehaviour
             FindNewResource();
     }
 
+    // find a nearby resource to gather from
     void FindNewResource()
     {
         ResourceSource resourceToGet = playerAI.GetClosestResource(transform.position);
@@ -83,8 +84,12 @@ public class UnitAI : MonoBehaviour
             return null;
     }
 
+    // called when there's no more resources - chase after a random enemy
     void PursueEnemy()
     {
+        Player enemyPlayer = GameManager.instance.GetRandomEnemyPlayer(unit.player);
 
+        if (enemyPlayer.units.Count > 0)
+            unit.AttackUnit(enemyPlayer.units[Random.Range(0, enemyPlayer.units.Count)]);
     }
 }
