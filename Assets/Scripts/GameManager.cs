@@ -25,4 +25,26 @@ public class GameManager : MonoBehaviour
 
         return ranPlayer;
     }
+
+    // called when a unit dies, check to see if there's one remaining player
+    public void UnitDeathCheck()
+    {
+        int remainingPlayers = 0;
+        Player winner = null;
+
+        for (int x = 0; x < players.Length; x++)
+        {
+            if (players[x].units.Count > 0)
+            {
+                remainingPlayers++;
+                winner = players[x];
+            }
+        }
+
+        // if there is more than 1 remaining player, return
+        if (remainingPlayers != 1)
+            return;
+
+        EndScreenUI.instance.SetEndScreen(winner.isMe);
+    }
 }

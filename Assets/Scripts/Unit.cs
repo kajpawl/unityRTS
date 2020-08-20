@@ -214,6 +214,9 @@ public class Unit : MonoBehaviour
     void Die()
     {
         player.units.Remove(this);
+
+        GameManager.instance.UnitDeathCheck();
+
         Destroy(gameObject);
     }
 
