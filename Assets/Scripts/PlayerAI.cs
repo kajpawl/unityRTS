@@ -30,7 +30,7 @@ public class PlayerAI : MonoBehaviour
     // called when a new unit is created
     public void OnUnitCreated(Unit unit)
     {
-
+        unit.GetComponent<UnitAI>().InitializeAI(this, unit);
     }
 
     // gets the closest resource to the position (random between nearest 3 for some variance)

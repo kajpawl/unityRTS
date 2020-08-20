@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour
     public float gatherRate;
     private float lastGatherTime;
 
-    private ResourceSource curResourceSource;
+    public ResourceSource curResourceSource;
     private Unit curEnemyTarget;
 
     [Header("Components")]

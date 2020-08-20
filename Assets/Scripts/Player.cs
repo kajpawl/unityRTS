@@ -34,10 +34,13 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        GameUI.instance.UpdateUnitCountText(units.Count);
-        GameUI.instance.UpdateFoodText(food);
+        if (isMe)
+        {
+            GameUI.instance.UpdateUnitCountText(units.Count);
+            GameUI.instance.UpdateFoodText(food);
 
-        CameraController.instance.FocusOnPosition(unitSpawnPos.position);
+            CameraController.instance.FocusOnPosition(unitSpawnPos.position);
+        }
 
         food += unitCost;
         CreateNewUnit();
@@ -51,7 +54,10 @@ public class Player : MonoBehaviour
             case ResourceType.Food:
             {
                 food += amount;
-                GameUI.instance.UpdateFoodText(food);
+
+                if (isMe)
+                    GameUI.instance.UpdateFoodText(food);
+
                 break;
             };
             default:
@@ -75,8 +81,11 @@ public class Player : MonoBehaviour
         if (onUnitCreated != null)
             onUnitCreated.Invoke(unit);
 
-        GameUI.instance.UpdateUnitCountText(units.Count);
-        GameUI.instance.UpdateFoodText(food);
+        if (isMe)
+        {
+            GameUI.instance.UpdateUnitCountText(units.Count);
+            GameUI.instance.UpdateFoodText(food);
+        }
     }
 
     // is this my unit?
