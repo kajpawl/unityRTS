@@ -207,6 +207,7 @@ public class Unit : MonoBehaviour
             Die();
 
         // update the health bar
+        healthBar.UpdateHealthBar(curHp, maxHp);
     }
 
     // called when our health reaches 0
